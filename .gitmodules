@@ -1,0 +1,6 @@
+[submodule "submodules/protocel"]
+	path = submodules/protocel
+	url = ../protocel
+[submodule "submodules/googleapis"]
+	path = submodules/googleapis
+	url = https://github.com/googleapis/googleapis
