@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package library.v1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+import "validate/validate.proto";
+
+message Author {
+    option (google.api.resource) = {
+        type: "library.v1/Author"
+        pattern: "authors/{author}"
+    };
+    string name = 1;
+    string display_name = 2 [(google.api.field_behavior) = REQUIRED];
+    google.protobuf.Timestamp birth_date = 3 [(google.api.field_behavior) = REQUIRED];
+    google.protobuf.Timestamp death_date = 4 [(protocel.validate.field).expr = 'death_date > birth_date'];
+}

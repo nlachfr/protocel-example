@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package library.v1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+
+import "proto/library/v1/author.proto";
+import "proto/library/v1/book.proto";
+
+import "authorize/authorize.proto";
+import "validate/validate.proto";
+
+option (protocel.authorize.file) = {
+    options: {
+        overloads: {
+            variables: [
+                {
+                    key: "apikey"
+                    value: {
+                        primitive: STRING
+                    }
+                }
+            ]
+        }
+    }
+};
+
+service LibraryService {
+    rpc CreateAuthor(CreateAuthorRequest) returns (Author) {
+        option (protocel.authorize.method).expr = 'headers.get("x-api-key") == apikey';
+    };
+    rpc ListAuthors(ListAuthorsRequest) returns (ListAuthorsResponse) {};
+    rpc DeleteAuthor(DeleteAuthorRequest) returns (Author) {
+        option (protocel.authorize.method).expr = 'headers.get("x-api-key") == apikey';
+    };
+
+    rpc CreateBook(CreateBookRequest) returns (Book) {
+        option (protocel.authorize.method).expr = 'headers.get("x-api-key") == apikey';
+    };
+    rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {};
+    rpc DeleteBook(DeleteBookRequest) returns (Book) {
+        option (protocel.authorize.method).expr = 'headers.get("x-api-key") == apikey';
+    };
+}
+
+message CreateAuthorRequest {
+    Author author = 1 [(google.api.field_behavior) = REQUIRED];
+}
+message ListAuthorsRequest {
+    int32 page_size = 1 [(protocel.validate.field).expr = 'page_size >= 0'];
+    string page_token = 2;
+}
+message ListAuthorsResponse {
+    repeated Author authors = 1;
+    string next_page_token = 2;
+}
+message DeleteAuthorRequest {
+    string name = 1 [(google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "library.v1/Author"
+    ];
+}
+
+message CreateBookRequest {
+    string parent = 1 [(google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "library.v1/Author"
+    ];
+    Book book = 2 [(google.api.field_behavior) = REQUIRED];
+}
+message ListBooksRequest {
+    string parent = 1 [(google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "library.v1/Author"
+    ];
+    int32 page_size = 2 [(protocel.validate.field).expr = 'page_size >= 0'];
+    string page_token = 3;
+}
+message ListBooksResponse {
+    repeated Book books = 1;
+    string next_page_token = 2;
+}
+message DeleteBookRequest {
+    string name = 1 [(google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "library.v1/Book"
+];
+}

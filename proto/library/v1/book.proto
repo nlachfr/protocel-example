@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package library.v1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+import "proto/library/v1/author.proto";
+
+message Book {
+    option (google.api.resource) = {
+        type: "library.v1/Book"
+        pattern: "authors/{author}/books/{book}"
+    };
+    string name = 1;
+    string author = 2 [(google.api.resource_reference).type = 'library.v1/Author']; 
+    google.protobuf.Timestamp publish_date = 3 [(google.api.field_behavior) = REQUIRED];
+}
