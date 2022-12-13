@@ -22,10 +22,10 @@ $(PROTOC_GEN_GO_GRPC):
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 $(PROTOC_GEN_GO_CEL_AUTHORIZE):
-	go install github.com/Neakxs/protocel/cmd/protoc-gen-go-cel-authorize@latest
+	go install github.com/Neakxs/protocel/cmd/protoc-gen-go-cel-authorize@v0.1.0
 
 $(PROTOC_GEN_GO_CEL_VALIDATE):
-	go install github.com/Neakxs/protocel/cmd/protoc-gen-go-cel-validate@latest
+	go install github.com/Neakxs/protocel/cmd/protoc-gen-go-cel-validate@v0.1.0
 
 
 %.pb.go: %.proto

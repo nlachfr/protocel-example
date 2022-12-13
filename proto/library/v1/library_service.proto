@@ -45,7 +45,7 @@ service LibraryService {
 }
 
 message CreateAuthorRequest {
-    Author author = 1 [(google.api.field_behavior) = REQUIRED];
+    Author author = 1 [(google.api.field_behavior) = REQUIRED, (protocel.validate.field).expr = 'author.validate()'];
 }
 message ListAuthorsRequest {
     int32 page_size = 1 [(protocel.validate.field).expr = 'page_size >= 0'];
@@ -65,7 +65,7 @@ message CreateBookRequest {
     string parent = 1 [(google.api.field_behavior) = REQUIRED,
         (google.api.resource_reference).type = "library.v1/Author"
     ];
-    Book book = 2 [(google.api.field_behavior) = REQUIRED];
+    Book book = 2 [(google.api.field_behavior) = REQUIRED, (protocel.validate.field).expr = 'book.validate()'];
 }
 message ListBooksRequest {
     string parent = 1 [(google.api.field_behavior) = REQUIRED,
@@ -81,5 +81,5 @@ message ListBooksResponse {
 message DeleteBookRequest {
     string name = 1 [(google.api.field_behavior) = REQUIRED,
         (google.api.resource_reference).type = "library.v1/Book"
-];
+    ];
 }
