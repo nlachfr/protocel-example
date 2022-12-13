@@ -38,7 +38,9 @@ func (m *CreateAuthorRequest) ValidateWithMask(ctx context.Context, fm *fieldmas
 		for k, v := range map[string]struct {
 			expr string
 			req  proto.Message
-		}{} {
+		}{
+			"author": {expr: `author.validate()`, req: m},
+		} {
 			if pgr, err := validate.BuildValidateProgram(v.expr, v.req, cfg); err != nil {
 				return
 			} else {
@@ -50,12 +52,39 @@ func (m *CreateAuthorRequest) ValidateWithMask(ctx context.Context, fm *fieldmas
 	return validate.ValidateWithMask(ctx, m, fm, _File_proto_library_v1_library_service_proto_CreateAuthorRequest_celValidateMap)
 }
 
+var (
+	_File_proto_library_v1_library_service_proto_ListAuthorsRequest_celValidateMap     map[string]cel.Program = nil
+	_File_proto_library_v1_library_service_proto_ListAuthorsRequest_celValidateMapOnce sync.Once
+)
+
 func (m *ListAuthorsRequest) Validate(ctx context.Context) error {
-	return nil
+	return m.ValidateWithMask(ctx, &fieldmaskpb.FieldMask{
+		Paths: []string{"*"},
+	})
 }
 
 func (m *ListAuthorsRequest) ValidateWithMask(ctx context.Context, fm *fieldmaskpb.FieldMask) error {
-	return nil
+	_File_proto_library_v1_library_service_proto_ListAuthorsRequest_celValidateMapOnce.Do(func() {
+		cfg := &validate.ValidateOptions{}
+		if err := proto.Unmarshal(_File_proto_library_v1_library_service_proto_rawValidateOptions, cfg); err != nil {
+			return
+		}
+		tmp := map[string]cel.Program{}
+		for k, v := range map[string]struct {
+			expr string
+			req  proto.Message
+		}{
+			"page_size": {expr: `page_size >= 0`, req: m},
+		} {
+			if pgr, err := validate.BuildValidateProgram(v.expr, v.req, cfg); err != nil {
+				return
+			} else {
+				tmp[k] = pgr
+			}
+		}
+		_File_proto_library_v1_library_service_proto_ListAuthorsRequest_celValidateMap = tmp
+	})
+	return validate.ValidateWithMask(ctx, m, fm, _File_proto_library_v1_library_service_proto_ListAuthorsRequest_celValidateMap)
 }
 
 func (m *ListAuthorsResponse) Validate(ctx context.Context) error {
@@ -124,6 +153,7 @@ func (m *CreateBookRequest) ValidateWithMask(ctx context.Context, fm *fieldmaskp
 			req  proto.Message
 		}{
 			"parent": {expr: `parent.matches("^(authors/[\\w-\\.]+)$")`, req: m},
+			"book":   {expr: `book.validate()`, req: m},
 		} {
 			if pgr, err := validate.BuildValidateProgram(v.expr, v.req, cfg); err != nil {
 				return
@@ -158,7 +188,8 @@ func (m *ListBooksRequest) ValidateWithMask(ctx context.Context, fm *fieldmaskpb
 			expr string
 			req  proto.Message
 		}{
-			"parent": {expr: `parent.matches("^(authors/[\\w-\\.]+)$")`, req: m},
+			"parent":    {expr: `parent.matches("^(authors/[\\w-\\.]+)$")`, req: m},
+			"page_size": {expr: `page_size >= 0`, req: m},
 		} {
 			if pgr, err := validate.BuildValidateProgram(v.expr, v.req, cfg); err != nil {
 				return

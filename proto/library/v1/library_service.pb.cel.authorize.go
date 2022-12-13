@@ -13,7 +13,9 @@ import (
 	proto "google.golang.org/protobuf/proto"
 )
 
-var _File_proto_library_v1_library_service_proto_rawAuthorizeOptions = []byte{}
+var _File_proto_library_v1_library_service_proto_rawAuthorizeOptions = []byte{
+	0x0a, 0x10, 0x12, 0x0e, 0x12, 0x0c, 0x0a, 0x06, 0x61, 0x70, 0x69, 0x6b, 0x65, 0x79, 0x12, 0x02, 0x08, 0x06,
+}
 
 func NewLibraryServiceAuthzInterceptor(opts ...options.RuntimeOptions) (authorize.AuthzInterceptor, error) {
 	cfg := &authorize.AuthorizeOptions{}
@@ -25,7 +27,14 @@ func NewLibraryServiceAuthzInterceptor(opts ...options.RuntimeOptions) (authoriz
 	for k, v := range map[string]struct {
 		expr string
 		req  proto.Message
-	}{} {
+	}{
+		"/library.v1.LibraryService/CreateAuthor": {expr: `headers.get("x-api-key") == apikey`, req: &CreateAuthorRequest{}},
+
+		"/library.v1.LibraryService/DeleteAuthor": {expr: `headers.get("x-api-key") == apikey`, req: &DeleteAuthorRequest{}},
+		"/library.v1.LibraryService/CreateBook":   {expr: `headers.get("x-api-key") == apikey`, req: &CreateBookRequest{}},
+
+		"/library.v1.LibraryService/DeleteBook": {expr: `headers.get("x-api-key") == apikey`, req: &DeleteBookRequest{}},
+	} {
 		if pgr, err := authorize.BuildAuthzProgram(v.expr, v.req, cfg, lib); err != nil {
 			return nil, err
 		} else {
